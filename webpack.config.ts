@@ -2,6 +2,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import path from 'path'
 import webpack from 'webpack'
+
 import 'webpack-dev-server'
 interface WebpackDefaultEnv {
   WEBPACK_BUNDLE: boolean
@@ -51,6 +52,10 @@ const config: (env?: Env, argv?: Argv) => webpack.Configuration = (env) => {
           use: {
             loader: 'swc-loader',
           },
+        },
+        {
+          test: /\.html$/,
+          loader: 'html-loader',
         },
         {
           test: /\.(sa|sc|c)ss$/i,
