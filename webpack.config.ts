@@ -2,8 +2,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import path from 'path'
 import webpack from 'webpack'
-
 import 'webpack-dev-server'
+
 interface WebpackDefaultEnv {
   WEBPACK_BUNDLE: boolean
   WEBPACK_BUILD: boolean
@@ -58,18 +58,48 @@ const config: (env?: Env, argv?: Argv) => webpack.Configuration = (env) => {
           loader: 'html-loader',
         },
         {
-          test: /\.(sa|sc|c)ss$/i,
+          test: /\.css$/i,
           use: [
             isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader',
               options: {
-                module: {
+                importLoaders: 1,
+                sourceMap: isDev,
+                modules: {
                   mode: 'icss',
                 },
               },
             },
-            'sass-loader',
+          ],
+        },
+        {
+          test: /\.(sa|sc)ss$/i,
+          use: [
+            isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                sourceMap: isDev,
+                modules: {
+                  mode: 'icss',
+                },
+              },
+            },
+            {
+              loader: 'resolve-url-loader',
+              options: {
+                sourceMap: isDev,
+                root: path.resolve(__dirname, 'src'),
+              },
+            },
+            {
+              loader: require.resolve('sass-loader'),
+              options: {
+                sourceMap: true,
+              },
+            },
           ],
         },
         {
